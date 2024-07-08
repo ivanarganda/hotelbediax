@@ -1,18 +1,51 @@
-import React, { useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useContext, useState , useMemo  } from 'react';
 import useDestinations from '../hooks/useDestinations';
 import useLoader from '../hooks/useLoader';
 import { Link } from 'react-router-dom';
 import { FormContext } from '../context/form';
+import { MsgContext } from '../context/message';
 
 import icons from '../utils/icons.json';
 import useUrls from '../hooks/useUrls';
+import useModalConfirm from '../hooks/useModalConfirm';
 
 const Dashboard = React.memo(({ filters , search , page , perPage }) => {
   const { destinations, loading, error } = useDestinations( filters , search || '' , page || 1 , perPage );
   const { changeId, changeType, getData, setOpenedModal } = useContext(FormContext);
+  const { useMessage } = useContext(MsgContext);
   const { urls } = useUrls();
+  const { showAlert } = useModalConfirm();
 
   const [hiddenRow , setHiddenRow] = useState(0);
+
+  async function deleteDestination(id) {
+    const userConfirmed = await showAlert( `You will delete destionation with id ${id}` , 'Are you sure you want to delete?','warning');
+    console.log( userConfirmed );
+    if (userConfirmed) {
+      setHiddenRow(id);
+      try {
+        const response = await fetch(`${urls.ws}/destination?id=${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        const responseJson = await response.json();
+  
+        if (response.ok && responseJson?.Success) {
+          console.log('Deleted successfully');
+          useMessage(`Destination with id ${id} deleted successfully`, 'success', 2000, 'top', 'center');
+        } else {
+          console.error('Failed to delete destination:', responseJson);
+          useMessage(`Failed to delete destination with id ${id}: ${responseJson?.message || 'Unknown error'}`, 'error', 2000, 'top', 'center');
+        }
+      } catch (error) {
+        console.error('Error deleting destination:', error);
+        useMessage(`Error deleting destination with id ${id}`, 'error', 2000, 'top', 'center');
+      }
+    }
+  }
 
   const searchCoincidences = (data, search) => {
     if (data === null || data === undefined ) {
@@ -78,23 +111,7 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
                 className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-red-500 text-white hover:bg-red-700 h-10 w-10"
                 aria-label="Delete"
                 onClick={async()=>{
-                  if (window.confirm('Are you sure you want to delete this destination?')) {
-                    setHiddenRow(id);
-                    try {
-                      const response = await fetch(`${urls.ws}/destination?id=${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                          'Content-Type': 'application/json'
-                        },
-                      })
-                      const responseJson = await response.json()
-                      if ( responseJson?.Success ){
-                        console.log('Deleted successfully');
-                      }
-                    } catch ( error ){
-                      console.error('Error deleting destination:', error);
-                    }
-                  }
+                  await deleteDestination(id);
                 }}
               >
                 <span dangerouslySetInnerHTML={{ __html: icons.trash }}></span>

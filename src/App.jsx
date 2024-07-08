@@ -1,8 +1,9 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import useLoader from './hooks/useLoader';
 import Form from './components/Form';
 import Snackbar_ from './components/Snackbar';
+import Overlay from './components/Overlay';
 
 // Layouts
 const Header = lazy(() => import('./components/layouts/Header'));
@@ -15,6 +16,7 @@ const SidebarLeft = lazy(() => import('./components/layouts/SidebarLeft'));
 function App() {
   // Bar seacrch  
   const [search, setSearch] = useState('');
+  const [scroll,setScroll] = useState(0);
   const [filters, setFilters] = useState({
     destination_name:'',
     description:'',
@@ -51,6 +53,19 @@ function App() {
   // Props
   const Pagination_ = <Pagination search={search} currentPage={currentPage} handlePreviousPageChange={handlePreviousPageChange} handlePageChange={handlePageChange} handleNextPageChange={handleNextPageChange} />
 
+  // Handle scroll events
+  useEffect(() => {
+    const handleScroll = () => {
+      setScroll(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
     <Router>
       <Suspense fallback={useLoader()}>
@@ -65,6 +80,7 @@ function App() {
         </div>
         {Pagination_}
         <Snackbar_ />
+        <Overlay scrollTop={scroll} />
       </Suspense>
     </Router>
   );
