@@ -10,6 +10,27 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
   const { destinations, loading, error } = useDestinations( filters , search || '' , page || 1 , perPage );
   const { changeId, changeType, getData, setOpenedModal } = useContext(FormContext);
 
+  const searchCoincidences = (data, search) => {
+    if (data === null || data === undefined ) {
+      return '';
+    }
+
+    if ( search == '' ){
+      return data;
+    }
+  
+    // Convert to string if it isn't already
+    if ( typeof search == 'number'){
+      search = search.toString();
+    }
+  
+    // Ensure search is a string
+     data = data.toString();
+  
+    return data.replaceAll(search, `<b>${search}</b>`);
+    
+  };
+
   const renderDestinationsRows = useMemo(() => {
     if (destinations.length === 0) {
       return (
@@ -28,13 +49,15 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
     return destinations.map((destination) => {
       const { id, destination_name, country_name, description, type, country_code } = destination;
 
+
+
       return (
         <tr key={id} className="border-b transition-colors hover:bg-gray-100">
-          <td className="p-4 align-middle">{id}</td>
-          <td className="p-4 align-middle">{destination_name}</td>
-          <td className="p-4 align-middle">{description}</td>
-          <td className="p-4 align-middle">{country_code} ({country_name})</td>
-          <td className="p-4 align-middle">{type}</td>
+          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(id,search || filters?.id ) }}></td>
+          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(destination_name,search || filters?.destination_name) }}></td>
+          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(description,search || filters?.description) }}></td>
+          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: `${searchCoincidences(country_code, search || filters?.country.split('--')[1])} (${searchCoincidences(country_name, search)})` }}></td>
+          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(type,search || filters?.type) }}></td>
           <td className="p-4 align-middle">
             <div className="flex items-center space-x-2">
               <Link
