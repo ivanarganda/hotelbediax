@@ -1,0 +1,22 @@
+[
+    {
+        "id":1,
+        "name":"hostel"
+    },
+    {
+        "id":2,
+        "name":"hotel"
+    },
+    {
+        "id":3,
+        "name":"resort"
+    },
+    {
+        "id":4,
+        "name":"suite"
+    },
+    {
+        "id":5,
+        "name":"business"
+    }
+]
