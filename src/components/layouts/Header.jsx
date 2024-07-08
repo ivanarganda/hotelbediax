@@ -5,7 +5,7 @@ export default function Header({ handleSearch }) {
   const { changeType, setOpenedModal } = useContext(FormContext);
 
   return (
-    <header className="flex justify-between fixed top-0 z-10 items-center w-full bg-gray-600 text-primary-foreground px-6 py-4 shadow-md">
+    <header className="flex justify-between fixed top-0 z-40 items-center w-full bg-gray-600 text-primary-foreground px-6 py-4 shadow-md">
       <div className="flex items-center w-1/2">
         <h1 className="text-2xl font-bold text-gray-200">Destinations</h1>
       </div>
