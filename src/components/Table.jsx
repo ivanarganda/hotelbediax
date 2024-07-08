@@ -5,10 +5,14 @@ import { Link } from 'react-router-dom';
 import { FormContext } from '../context/form';
 
 import icons from '../utils/icons.json';
+import useUrls from '../hooks/useUrls';
 
 const Dashboard = React.memo(({ filters , search , page , perPage }) => {
   const { destinations, loading, error } = useDestinations( filters , search || '' , page || 1 , perPage );
   const { changeId, changeType, getData, setOpenedModal } = useContext(FormContext);
+  const { urls } = useUrls();
+
+  const [hiddenRow , setHiddenRow] = useState(0);
 
   const searchCoincidences = (data, search) => {
     if (data === null || data === undefined ) {
@@ -49,8 +53,8 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
     return destinations.map((destination) => {
       const { id, destination_name, country_name, description, type, country_code } = destination;
 
-      return (
-        <tr key={id} className="border-b transition-colors hover:bg-gray-100">
+      return id != hiddenRow && ( 
+        <tr key={id} id={`row-${id}`} className="border-b transition-colors hover:bg-gray-100">
           <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: searchCoincidences(id,search || filters?.id ) }}></td>
           <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: searchCoincidences(destination_name,search || filters?.destination_name) }}></td>
           <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: searchCoincidences(description,search || filters?.description) }}></td>
@@ -73,6 +77,25 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
               <Link
                 className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-red-500 text-white hover:bg-red-700 h-10 w-10"
                 aria-label="Delete"
+                onClick={async()=>{
+                  if (window.confirm('Are you sure you want to delete this destination?')) {
+                    setHiddenRow(id);
+                    try {
+                      const response = await fetch(`${urls.ws}/destination?id=${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                      })
+                      const responseJson = await response.json()
+                      if ( responseJson?.Success ){
+                        console.log('Deleted successfully');
+                      }
+                    } catch ( error ){
+                      console.error('Error deleting destination:', error);
+                    }
+                  }
+                }}
               >
                 <span dangerouslySetInnerHTML={{ __html: icons.trash }}></span>
               </Link>
@@ -81,7 +104,7 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
         </tr>
       );
     });
-  }, [destinations, error, changeType]); 
+  }, [destinations, error, changeType, hiddenRow]); 
 
   return (
     <>
