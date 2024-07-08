@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CountriesContext } from '../context/countries';
 import { FormContext } from '../context/form';
@@ -8,25 +8,29 @@ import types from '../utils/types.json';
 import icons from '../utils/icons.json';
 import useUrls from '../hooks/useUrls';
 
-const Form = React.memo( ()=> {
+const Form = React.memo(() => {
   const { useMessage } = useContext(MsgContext);
   const { countries } = useContext(CountriesContext);
   const { contentForm, getData, changeType, type, openedModal, setOpenedModal } = useContext(FormContext);
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-  const [Section] = useFadeIn();
+  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm();
+  const Section = useFadeIn();
   const { urls } = useUrls();
+  const [isFormReady, setIsFormReady] = useState(false);
 
   useEffect(() => {
-    if (type === 'update') {
-      setValue('id', contentForm?.id);
-      setValue('name', contentForm?.destination_name);
-      setValue('description', contentForm?.description);
-      setValue('country_code', `${contentForm?.country_code}`);
-      setValue('type', contentForm?.type);
-    } else {
-      resetForm();
+    if (openedModal) {
+      if (type === 'update') {
+        setValue('id', contentForm?.id);
+        setValue('name', contentForm?.destination_name);
+        setValue('description', contentForm?.description);
+        setValue('country_code', `${contentForm?.country_code}`);
+        setValue('type', contentForm?.type);
+      } else {
+        resetForm();
+      }
+      setIsFormReady(true);
     }
-  }, [type, contentForm, setValue]);
+  }, [type, setValue, contentForm, openedModal]);
 
   const resetForm = () => {
     setValue('id', '');
@@ -70,7 +74,7 @@ const Form = React.memo( ()=> {
   };
 
   const renderInput = (id, label, required = false) => (
-    ( id !== 'id' && 
+    (id !== 'id' && 
       <div>
       <label className='block text-sm font-medium text-gray-700' htmlFor={id}>
         {label} {required && '*'}
@@ -84,7 +88,6 @@ const Form = React.memo( ()=> {
       {errors[id] && <p className='text-red-500 text-xs mt-1'>{label} is required</p>}
     </div>
     )
-    
   );
 
   const renderSelect = (id, label, options, required = false, defaultValue = '') => (
@@ -106,9 +109,9 @@ const Form = React.memo( ()=> {
   );
 
   return (
-    openedModal && (
+    openedModal && isFormReady && (
       <div className='fixed z-30 inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-        <Section className='w-full'>
+        <Section>
           <div className='relative bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl'>
             <button
               className='absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition duration-150'
