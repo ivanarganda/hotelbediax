@@ -10,7 +10,7 @@ const SidebarLeft = React.memo(({handleFilters})=> {
   return (
     <>
         <div className={`left-0 ${ opened ? 'w-80' : 'w-0'} relative top-0 min-h-screen p-4 text-muted-foreground rounded-md transition-all duration-300 w-20 shadow-lg`}>
-            <button onClick={()=>setOpened(!opened)} className="absolute right-0 top-0 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 w-10 mb-4">
+            <button onClick={()=>setOpened(!opened)} className="absolute w-4 h-4 right-2 top-0 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-10 w-10 mb-4">
                 { opened ? (
                   <span dangerouslySetInnerHTML={{ __html: icons.leftArrow }}></span>
                 ) : (
