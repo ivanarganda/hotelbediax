@@ -36,7 +36,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
         pageNumbers.push(
           <button
             key={i}
-            className={`px-2 py-1 ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-2 py-1 ${currentPage === i ? 'bg-blue-400 text-white' : 'bg-gray-200'}`}
             onClick={() => handlePageChange(i)}
             aria-label={`Page ${i}`}
           >
@@ -49,7 +49,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
         pageNumbers.push(
           <button
             key={1}
-            className={`px-2 py-1 ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-2 py-1 ${currentPage === 1 ? 'bg-blue-400 text-white' : 'bg-gray-200'}`}
             onClick={() => handlePageChange(1)}
             aria-label="Page 1"
           >
@@ -63,7 +63,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
         pageNumbers.push(
           <button
             key={i}
-            className={`px-2 py-1 ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-2 py-1 ${currentPage === i ? 'bg-blue-400 text-white' : 'bg-gray-200'}`}
             onClick={() => handlePageChange(i)}
             aria-label={`Page ${i}`}
           >
@@ -77,7 +77,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
           <span key="end-ellipsis" className="px-2">...</span>,
           <button
             key={totalPages}
-            className={`px-2 py-1 ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-2 py-1 ${currentPage === totalPages ? 'bg-blue-400 text-white' : 'bg-gray-200'}`}
             onClick={() => handlePageChange(totalPages)}
             aria-label={`Page ${totalPages}`}
           >
@@ -97,7 +97,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
       </div>
       <div className="w-full flex items-center space-x-2">
         <button
-          className={`px-2 py-1 ${currentPage === 1 ? 'bg-gray-200' : 'bg-blue-500'}`}
+          className={`px-2 py-1 ${currentPage === 1 ? 'bg-gray-200' : 'bg-blue-400'}`}
           onClick={handlePreviousPageChange}
           disabled={currentPage === 1}
           aria-label="Previous Page"
@@ -108,7 +108,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
           {renderPageNumbers()}
         </div>
         <button
-          className={`px-2 py-1 ${currentPage === totalPages ? 'bg-gray-200' : 'bg-blue-500'}`}
+          className={`px-2 py-1 ${currentPage === totalPages ? 'bg-gray-200' : 'bg-blue-400'}`}
           onClick={handleNextPageChange}
           disabled={currentPage === totalPages}
           aria-label="Next Page"

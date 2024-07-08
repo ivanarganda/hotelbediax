@@ -49,15 +49,13 @@ const Dashboard = React.memo(({ filters , search , page , perPage }) => {
     return destinations.map((destination) => {
       const { id, destination_name, country_name, description, type, country_code } = destination;
 
-
-
       return (
         <tr key={id} className="border-b transition-colors hover:bg-gray-100">
-          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(id,search || filters?.id ) }}></td>
-          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(destination_name,search || filters?.destination_name) }}></td>
-          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(description,search || filters?.description) }}></td>
-          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: `${searchCoincidences(country_code, search || filters?.country.split('--')[1])} (${searchCoincidences(country_name, search)})` }}></td>
-          <td className="p-4 align-middle" dangerouslySetInnerHTML={{ __html: searchCoincidences(type,search || filters?.type) }}></td>
+          <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: searchCoincidences(id,search || filters?.id ) }}></td>
+          <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: searchCoincidences(destination_name,search || filters?.destination_name) }}></td>
+          <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: searchCoincidences(description,search || filters?.description) }}></td>
+          <td className="p-4 align-middle text-gray-500" dangerouslySetInnerHTML={{ __html: `${searchCoincidences(country_code, search || filters?.country.split('--')[1])} (${searchCoincidences(country_name, search)})` }}></td>
+          <td className="p-4 align-middle text-gray-500 capitalize" dangerouslySetInnerHTML={{ __html: searchCoincidences(type,search || filters?.type) }}></td>
           <td className="p-4 align-middle">
             <div className="flex items-center space-x-2">
               <Link
