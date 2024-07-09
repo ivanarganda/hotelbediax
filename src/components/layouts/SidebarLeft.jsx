@@ -26,7 +26,7 @@ const SidebarLeft = React.memo(({handleFilters})=> {
                     <label htmlFor="countries">
                       <span className="sr-only">Select a country</span>
                       <span className="block text-sm font-medium text-gray-900">Select a country</span>
-                      <span className="block text-sm text-gray-500">
+                      <span className="block text-sm text-gray-800">
                         Showing {countries.length} countries
                       </span>
                     </label>
@@ -69,7 +69,7 @@ const SidebarLeft = React.memo(({handleFilters})=> {
                     <label htmlFor="description">
                       <span className="sr-only">Description</span>
                       <span className="block text-sm font-medium text-gray-900">Description</span>
-                    </label>
+                    </label> 
                     <input type='text' id='description' onChange={handleFilters} name='description' className="block w-full px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:border-blue-300" placeholder='This is a destination....' />
                   </x-link>
                 </form> 

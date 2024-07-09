@@ -14,29 +14,25 @@ const Pagination = lazy(() => import('./components/Pagination'));
 const SidebarLeft = lazy(() => import('./components/layouts/SidebarLeft'));
 
 function App() {
-  // Bar seacrch  
   const [search, setSearch] = useState('');
-  const [scroll,setScroll] = useState(0);
+  const [scroll, setScroll] = useState(0);
   const [filters, setFilters] = useState({
-    destination_name:'',
-    description:'',
-    country:'',
-    type:''
+    destination_name: '',
+    description: '',
+    country: '',
+    type: ''
   });
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
   }
-  // Sidebarlef
+
   const handleFilters = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
-    setFilters({...filters, [name]: value });
-
-    console.log( filters );
+    setFilters({ ...filters, [name]: value });
   }
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {
@@ -50,10 +46,7 @@ function App() {
   const handleNextPageChange = () => {
     setCurrentPage(currentPage + 1);
   }
-  // Props
-  const Pagination_ = <Pagination search={search} currentPage={currentPage} handlePreviousPageChange={handlePreviousPageChange} handlePageChange={handlePageChange} handleNextPageChange={handleNextPageChange} />
 
-  // Handle scroll events
   useEffect(() => {
     const handleScroll = () => {
       setScroll(window.scrollY);
@@ -61,11 +54,22 @@ function App() {
 
     window.addEventListener('scroll', handleScroll);
 
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const Pagination_ = (
+    <Pagination
+      search={search}
+      filters={filters}
+      currentPage={currentPage}
+      handlePreviousPageChange={handlePreviousPageChange}
+      handlePageChange={handlePageChange}
+      handleNextPageChange={handleNextPageChange}
+    />
+  );
+
   return (
     <Router>
       <Suspense fallback={useLoader()}>
@@ -73,8 +77,8 @@ function App() {
         <div className='w-full z-30 mt-24 -mb-20'>
           {Pagination_}
         </div>
-        <div className='flex w-full flex-row justify-centter'>
-          <SidebarLeft handleFilters={handleFilters}/>
+        <div className='flex w-full flex-row justify-center'>
+          <SidebarLeft handleFilters={handleFilters} />
           <Form />
           <Table filters={filters} search={search} page={currentPage} />
         </div>

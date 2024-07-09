@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import icons from '../utils/icons.json';
 import useUrls from '../hooks/useUrls';
 
-const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, handlePageChange, handleNextPageChange }) => {
+const Pagination = React.memo(({ search, filters, currentPage, handlePreviousPageChange, handlePageChange, handleNextPageChange }) => {
   const [totalRecords, setTotalRecords] = useState(0);
   const totalPages = Math.ceil(totalRecords / 400);
   const { urls } = useUrls();
@@ -10,7 +10,8 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
   const getTotalRecords = useCallback(async () => {
     const json_data = {
       total_records: true,
-      search: search
+      search: search,
+      filtersSidebar: filters
   };
     const response = await fetch(`${urls.ws}/destinations`, {
       method: 'POST',
@@ -21,7 +22,7 @@ const Pagination = React.memo(({ search, currentPage, handlePreviousPageChange, 
     });
     const data = await response.json();
     setTotalRecords(data.total_records);
-  }, [search, urls.ws]);
+  }, [search, filters, urls.ws]);
 
   useEffect(() => {
     getTotalRecords();

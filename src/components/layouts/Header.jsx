@@ -12,10 +12,10 @@ export default function Header({ handleSearch }) {
       <div className="w-auto">
         <button
           onClick={() => {
-            changeType('create');
+            changeType('create'); 
             setOpenedModal(true);
           }}
-          className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 transition duration-200"
+          className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md text-white bg-green-700 hover:bg-green-600 transition duration-200"
           aria-label="Create new destination"
         >
           New
